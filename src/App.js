@@ -1,23 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import "./App.css";
+import { PostDatas } from "./redux/action/action";
 
 function App() {
+  const [term, setterm] = useState("");
+  const { posts, isLoading, error } = useSelector((state) => state);
+  console.log(posts);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(PostDatas());
+  }, []);
+
+  // const filterPost = posts.filter((filt) =>
+  //   filt.title.toLowerCase().includes(setterm.toLowerCase())
+  // );
+
+  const handleSearch = (e) => {
+    setterm(e.target.value);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <input
+          style={{ height: "2rem", width: "12rem" }}
+          type="text"
+          value={term}
+          placeholder="search here"
+        />
+        <button className="btn" onClick={handleSearch}>
+          Search
+        </button>
+      </div>
+
+      {isLoading ? (
+        "Loading..."
+      ) : (
+        <>
+          {posts.map((item, i) => (
+            <div className="box_wrapper">
+              <h1 key={i}>{item.title}</h1>
+              <p className="text-body">{item.body}</p>
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 }
