@@ -4,7 +4,7 @@ import "./App.css";
 import { PostDatas } from "./redux/action/action";
 
 function App() {
-  const [term, setterm] = useState("");
+  const [term, setterm] = useState([]);
   const { posts, isLoading, error } = useSelector((state) => state);
   console.log(posts);
 
@@ -18,8 +18,12 @@ function App() {
   //   filt.title.toLowerCase().includes(setterm.toLowerCase())
   // );
 
-  const handleSearch = (e) => {
-    setterm(e.target.value);
+  const handleFilter = (e) => {
+    const searchWord = e.target.value;
+    const filterPost = posts.filter((value) => {
+      return value.title.toLowerCase().includes(searchWord.toLowerCase());
+    });
+    setterm(filterPost);
   };
 
   return (
@@ -29,11 +33,10 @@ function App() {
           style={{ height: "2rem", width: "12rem" }}
           type="text"
           value={term}
+          onChange={handleFilter}
           placeholder="search here"
         />
-        <button className="btn" onClick={handleSearch}>
-          Search
-        </button>
+        <button className="btn">Search</button>
       </div>
 
       {isLoading ? (
