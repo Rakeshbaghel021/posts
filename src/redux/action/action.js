@@ -23,12 +23,14 @@ export const dataFetchFail = (error) => {
   };
 };
 
-export const PostDatas = () => {
+export const PostDatas = (setterm) => {
   return (dispatch) => {
     dispatch(dataFetchInit());
     axios
       .get("https://jsonplaceholder.typicode.com/posts")
       .then((res) => dispatch(dataFetchSuccess(res.data)))
+      .then((res) => setterm(res.posts))
+
       .catch((error) => {
         dispatch(dataFetchFail(true));
       });
